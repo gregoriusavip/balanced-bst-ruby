@@ -14,5 +14,9 @@ class Node
     data <=> other.data
   end
 
+  def leaf?
+    left.eql?(right) && left.nil?
+  end
+
   attr_accessor :left, :right, :data
 end

@@ -2,4 +2,6 @@
 
 require_relative('lib/bst')
 
-Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+test_tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+test_tree.insert(24)
+test_tree.delete(8)
