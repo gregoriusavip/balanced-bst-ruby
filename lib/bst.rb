@@ -13,7 +13,6 @@ class Tree
   def insert(value)
     new_node = Node.new(value)
     root.nil? ? @root = new_node : insert_helper(new_node)
-    pretty_print
   end
 
   def delete(value)
@@ -21,7 +20,13 @@ class Tree
     return find_node if root.nil?
 
     delete_helper(find_node)
-    pretty_print
+  end
+
+  def find(value)
+    find_node = Node.new(value)
+    return nil if root.nil?
+
+    find_helper(find_node)
   end
 
   private
@@ -80,6 +85,15 @@ class Tree
     end
 
     delete_two_children_node(cur_node, min_node.left, true, min_node)
+  end
+
+  def find_helper(target_node, node = @root)
+    return node if node == target_node
+
+    return find_helper(target_node, node.left) if target_node < node && !node.left.nil?
+    return find_helper(target_node, node.right) if target_node > node && !node.right.nil?
+
+    nil
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
