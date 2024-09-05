@@ -8,6 +8,7 @@ class Tree
 
   def initialize(arr)
     self.root = build_tree(arr.uniq.sort)
+    pretty_print
   end
 
   def insert(value)
@@ -27,7 +28,6 @@ class Tree
     return nil if root.nil?
 
     find_helper(find_node)
-    pretty_print
   end
 
   def level_order_iterative
@@ -52,6 +52,30 @@ class Tree
     cur_node.left && queue << cur_node.left
     cur_node.right && queue << cur_node.right
     level_order_recursive(queue, res, &block)
+  end
+
+  def inorder(node = @root, res = [], &block)
+    return res unless node
+
+    inorder(node.left, res, &block)
+    block_given? ? yield(node) : res << node.data
+    inorder(node.right, res, &block)
+  end
+
+  def preorder(node = @root, res = [], &block)
+    return res unless node
+
+    block_given? ? yield(node) : res << node.data
+    preorder(node.left, res, &block)
+    preorder(node.right, res, &block)
+  end
+
+  def postorder(node = @root, res = [], &block)
+    return res unless node
+
+    postorder(node.left, res, &block)
+    postorder(node.right, res, &block)
+    block_given? ? yield(node) : res << node.data
   end
 
   private
