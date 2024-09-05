@@ -34,22 +34,24 @@ class Tree
     return nil if @root.nil?
 
     queue = [@root]
+    res = []
     until queue.empty?
       cur_node = queue.shift
-      yield(cur_node)
+      block_given? ? yield(cur_node) : res << cur_node.data
       cur_node.left && queue << cur_node.left
       cur_node.right && queue << cur_node.right
     end
+    res
   end
 
-  def level_order_recursive(queue = [@root], &block)
-    return if queue.empty? || @root.nil?
+  def level_order_recursive(queue = [@root], res = [], &block)
+    return res if queue.empty? || @root.nil?
 
     cur_node = queue.shift
-    yield(cur_node)
+    block_given? ? yield(cur_node) : res << cur_node.data
     cur_node.left && queue << cur_node.left
     cur_node.right && queue << cur_node.right
-    level_order_recursive(queue, &block)
+    level_order_recursive(queue, res, &block)
   end
 
   private
