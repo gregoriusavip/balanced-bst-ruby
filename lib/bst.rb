@@ -27,6 +27,29 @@ class Tree
     return nil if root.nil?
 
     find_helper(find_node)
+    pretty_print
+  end
+
+  def level_order_iterative
+    return nil if @root.nil?
+
+    queue = [@root]
+    until queue.empty?
+      cur_node = queue.shift
+      yield(cur_node)
+      cur_node.left && queue << cur_node.left
+      cur_node.right && queue << cur_node.right
+    end
+  end
+
+  def level_order_recursive(queue = [@root], &block)
+    return if queue.empty? || @root.nil?
+
+    cur_node = queue.shift
+    yield(cur_node)
+    cur_node.left && queue << cur_node.left
+    cur_node.right && queue << cur_node.right
+    level_order_recursive(queue, &block)
   end
 
   private
