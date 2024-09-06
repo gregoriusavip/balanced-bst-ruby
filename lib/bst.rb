@@ -76,10 +76,10 @@ class Tree # rubocop:disable Metrics/ClassLength
     block_given? ? yield(node) : res << node.data
   end
 
-  def height
-    return 0 if @root.nil?
+  def height(node = @root)
+    return 0 if node.nil?
 
-    height_helper([@root, nil], 0)
+    height_helper([node, nil], 0)
   end
 
   def depth(value)
@@ -87,6 +87,15 @@ class Tree # rubocop:disable Metrics/ClassLength
     return nil if root.nil?
 
     find_depth(find_node)
+  end
+
+  def balanced?
+    return true if root.nil? || root.leaf?
+
+    left = height(root.left)
+    right = height(root.right)
+
+    (left - right).abs <= 1
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
