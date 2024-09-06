@@ -99,7 +99,7 @@ class Tree # rubocop:disable Metrics/ClassLength
   end
 
   def rebalance
-    initialize(inorder, cleaned: true)
+    initialize(inorder, cleaned: true) unless balanced?
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
