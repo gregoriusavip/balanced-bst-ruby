@@ -82,6 +82,13 @@ class Tree # rubocop:disable Metrics/ClassLength
     height_helper([@root, nil], 0)
   end
 
+  def depth(value)
+    find_node = Node.new(value)
+    return nil if root.nil?
+
+    find_depth(find_node)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -151,6 +158,15 @@ class Tree # rubocop:disable Metrics/ClassLength
 
     return find_helper(target_node, node.left) if target_node < node && !node.left.nil?
     return find_helper(target_node, node.right) if target_node > node && !node.right.nil?
+
+    nil
+  end
+
+  def find_depth(target_node, counter = 0, node = @root)
+    return counter + 1 if node == target_node
+
+    return find_depth(target_node, counter + 1, node.left) if target_node < node && !node.left.nil?
+    return find_depth(target_node, counter + 1, node.right) if target_node > node && !node.right.nil?
 
     nil
   end
