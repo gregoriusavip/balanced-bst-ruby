@@ -6,8 +6,8 @@ require_relative('node')
 class Tree # rubocop:disable Metrics/ClassLength
   attr_reader :root
 
-  def initialize(arr)
-    self.root = build_tree(arr.uniq.sort)
+  def initialize(arr, cleaned: false)
+    self.root = (cleaned ? build_tree(arr) : build_tree(arr.uniq.sort))
     pretty_print
   end
 
@@ -96,6 +96,10 @@ class Tree # rubocop:disable Metrics/ClassLength
     right = height(root.right)
 
     (left - right).abs <= 1
+  end
+
+  def rebalance
+    initialize(inorder, cleaned: true)
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
