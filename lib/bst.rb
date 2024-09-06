@@ -3,7 +3,7 @@
 require_relative('node')
 
 # A balanced binary search tree
-class Tree
+class Tree # rubocop:disable Metrics/ClassLength
   attr_reader :root
 
   def initialize(arr)
@@ -38,8 +38,7 @@ class Tree
     until queue.empty?
       cur_node = queue.shift
       block_given? ? yield(cur_node) : res << cur_node.data
-      cur_node.left && queue << cur_node.left
-      cur_node.right && queue << cur_node.right
+      queue_next_nodes(queue, cur_node)
     end
     res
   end
@@ -49,8 +48,7 @@ class Tree
 
     cur_node = queue.shift
     block_given? ? yield(cur_node) : res << cur_node.data
-    cur_node.left && queue << cur_node.left
-    cur_node.right && queue << cur_node.right
+    queue_next_nodes(queue, cur_node)
     level_order_recursive(queue, res, &block)
   end
 
@@ -76,6 +74,12 @@ class Tree
     postorder(node.left, res, &block)
     postorder(node.right, res, &block)
     block_given? ? yield(node) : res << node.data
+  end
+
+  def pretty_print(node = @root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
+    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
+    puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
+    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
   private
@@ -145,10 +149,9 @@ class Tree
     nil
   end
 
-  def pretty_print(node = @root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
-    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
-    puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
-    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+  def queue_next_nodes(queue, cur_node)
+    queue << cur_node.left unless cur_node.left.nil?
+    queue << cur_node.right unless cur_node.right.nil?
   end
 
   attr_writer :root
