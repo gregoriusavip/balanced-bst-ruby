@@ -115,7 +115,7 @@ class Tree # rubocop:disable Metrics/ClassLength
   end
 
   def insert_helper(new_node, cur_node = root)
-    return cur_node if cur_node.eql?(new_node)
+    return cur_node if cur_node == new_node
 
     if new_node < cur_node
       cur_node.left.nil? ? cur_node.left = new_node : insert_helper(new_node, cur_node.left)
