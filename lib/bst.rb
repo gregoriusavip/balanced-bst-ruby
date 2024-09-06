@@ -76,6 +76,12 @@ class Tree # rubocop:disable Metrics/ClassLength
     block_given? ? yield(node) : res << node.data
   end
 
+  def height
+    return 0 if @root.nil?
+
+    height_helper([@root, nil], 0)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true) # rubocop:disable Style/OptionalBooleanParameter
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -152,6 +158,17 @@ class Tree # rubocop:disable Metrics/ClassLength
   def queue_next_nodes(queue, cur_node)
     queue << cur_node.left unless cur_node.left.nil?
     queue << cur_node.right unless cur_node.right.nil?
+  end
+
+  def height_helper(queue, depth)
+    until queue.empty?
+      cur_node = queue.shift
+      if cur_node.nil?
+        depth += 1
+        queue.empty? ? (return depth) : queue << nil
+      end
+      queue_next_nodes(queue, cur_node) unless cur_node.nil?
+    end
   end
 
   attr_writer :root
